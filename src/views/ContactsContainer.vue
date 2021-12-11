@@ -1,37 +1,13 @@
 <template>
   <div class="container mx-auto h-screen bg-green-300">
-      <div class="bg-blue-200">
-        <div class="flex w-1/2 bg-yellow-300">
-          <div class="bg-green-600 w-1/3">
-            image1
-          </div>
-          <div class="bg-red-600 flex-grow">
-            <p class="text-2xl pl-2">Name</p>
-            <p class="text-sm pl-2 pb-2">welcome message</p>
-          </div>
-        </div>
-      </div>
+      <Header/>
       <div class="grid grid-cols-3 gap-4">
         <div class="col-span-2 bg-red-300">
-          <div class="container bg-yellow-600">
-            <p class="text-2xl">Name</p>
-            <p class="text-base">company</p>
-            <p class="text-base">Role</p>
-            <p class="text-base">Phone no</p>
-            <p class="text-base">Email</p>
-            <div class="grid grid-cols-3">
-              <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Button
-              </button>
-              <button
-                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Button 2
-              </button>
-            </div>
-          </div>
+          <ContactDetailsCard
+            v-if="currentScreen == 'showContact'"/>
+            <EditContact
+            v-if="currentScreen == 'editContact'"
+            @save="onSaveContact"/>
         </div>
         <div class="bg-red-300">
           <div class="">
@@ -69,15 +45,48 @@
 </template>
 
 <script>
+import { mapActions, mapState } from 'vuex'
+import Header from "../components/Header.vue"
+import ContactDetailsCard from "../components/ContactDetailsCard.vue"
+import EditContact from "../components/EditContact.vue"
+
+const initContact = {
+  id: null,
+  name: '',
+  email: '',
+  phone: '',
+  workPlace: '',
+  role: ''
+}
+
 export default {
-  name: 'HelloWorld',
-  props: {
-    msg: String
-  }
+    name: 'ContactsContainer',
+    components: {
+        Header,
+        ContactDetailsCard,
+        EditContact,
+    },
+    data() {
+        return {
+            currentScreen: 'editContact',
+            displayContact: initContact
+        }
+    },
+    computed: {
+        ...mapState('contacts', ['rows', 'contact']),
+    },
+    methods:{
+            ...mapActions('contacts', [
+        'selectContact',
+        'saveContact',
+        'deleteContact'
+        ]),
+        
+        async onSaveContact (contact) {
+            await this.saveContact(contact)
+            this.formContact = initContact
+            // this.onShowContact(contact)
+        },
+    }
 }
 </script>
-
-<!-- Add "scoped" attribute to limit CSS to this component only -->
-<style scoped>
-
-</style>
