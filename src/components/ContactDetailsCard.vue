@@ -1,6 +1,6 @@
 <template>
-    <div class="container bg-green-200 rounded-3xl p-2 mt-14" v-if="contact">
-            <div class="absolute bg-yellow-100 rounded-full text-3xl -mt-12 mx-40 w-24 h-24 pt-8 pl-10">P</div>
+    <div class="container bg-blue-100 rounded-3xl p-2 mt-14 shadow-md border border-gray-300 border-t-0" v-if="contact">
+            <div class="absolute bg-gray-700 rounded-full text-3xl -mt-12 mx-40 w-24 h-24 pt-8 pl-10 shadow-md text-white">{{initial}}</div>
             <div class="pt-14">
                 <p class="text-3xl text-center" v-if="contact.name">{{contact.name}}</p>
                 <p class="text-base text-center" v-if="contact.workPlace">{{contact.workPlace}} | {{contact.role}}</p>
@@ -14,20 +14,20 @@
                  <div class="flex mt-2">
                   <!-- <img class="h-6 w-6" src="../assets/email.png"> -->
                   <div>
-                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" width="400" height="400" viewBox="0, 0, 400,400"><g id="svgg"><path id="path0" d="M174.609 1.194 C 8.750 22.804,-59.514 227.069,60.256 343.370 C 173.155 452.998,362.812 395.808,395.987 242.132 C 424.984 107.811,310.727 -16.541,174.609 1.194 M258.994 107.616 L 316.303 143.359 258.152 143.560 C 226.168 143.670,173.835 143.670,141.855 143.560 L 83.711 143.359 141.660 107.219 C 173.532 87.342,200.076 71.257,200.647 71.476 C 201.217 71.694,227.473 87.957,258.994 107.616 M137.579 181.245 C 168.571 200.579,195.295 216.806,196.964 217.307 C 202.016 218.820,203.716 217.884,262.460 181.237 C 293.443 161.908,318.960 146.094,319.162 146.094 C 320.310 146.094,319.483 263.942,318.307 267.901 C 316.888 272.681,312.251 278.163,307.457 280.730 L 304.297 282.422 200.952 282.628 L 97.608 282.835 93.754 281.177 C 88.467 278.903,83.260 273.178,81.700 267.923 C 80.510 263.919,79.688 146.094,80.849 146.094 C 81.058 146.094,106.587 161.912,137.579 181.245 " stroke="none" fill="#0000FF" fill-rule="evenodd"/></g></svg>
+                    <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" width="400" height="400" viewBox="0, 0, 400,400"><g id="svgg"><path id="path0" d="M174.609 1.194 C 8.750 22.804,-59.514 227.069,60.256 343.370 C 173.155 452.998,362.812 395.808,395.987 242.132 C 424.984 107.811,310.727 -16.541,174.609 1.194 M258.994 107.616 L 316.303 143.359 258.152 143.560 C 226.168 143.670,173.835 143.670,141.855 143.560 L 83.711 143.359 141.660 107.219 C 173.532 87.342,200.076 71.257,200.647 71.476 C 201.217 71.694,227.473 87.957,258.994 107.616 M137.579 181.245 C 168.571 200.579,195.295 216.806,196.964 217.307 C 202.016 218.820,203.716 217.884,262.460 181.237 C 293.443 161.908,318.960 146.094,319.162 146.094 C 320.310 146.094,319.483 263.942,318.307 267.901 C 316.888 272.681,312.251 278.163,307.457 280.730 L 304.297 282.422 200.952 282.628 L 97.608 282.835 93.754 281.177 C 88.467 278.903,83.260 273.178,81.700 267.923 C 80.510 263.919,79.688 146.094,80.849 146.094 C 81.058 146.094,106.587 161.912,137.579 181.245 " stroke="none" fill="#000000" fill-rule="evenodd"/></g></svg>
                   </div>
                   <p class="text-base ml-2" v-if="contact.email">{{contact.email}}</p>
                 </div>
                 
-                <div class="flex flex-row">
+                <div class="flex flex-row justify-between">
                   <button
-                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded-3xl w-24 mt-2 shadow mr-2"
+                    class="bg-green-400 hover:bg-green-600 text-gray-800 hover:text-black font-semibold py-2 px-4  rounded-3xl w-24 mt-2 shadow-lg"
                     @click="onEdit(contact)"
                   >
                     Edit
                   </button>
                   <button
-                    class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded-3xl w-24 mt-2 shadow"
+                    class="bg-red-400 hover:bg-red-600 text-black font-semibold py-2 px-4  rounded-3xl w-24 mt-2 shadow-lg"
                     @click="onDelete(contact)"
                   >
                     Delete
@@ -48,6 +48,11 @@ export default {
       },
       onDelete (contact) {
         this.$emit('delete', contact)
+      }
+    },
+    computed: {
+      initial () {
+        return this.contact?.name.charAt(0).toUpperCase();
       }
     }
 }
