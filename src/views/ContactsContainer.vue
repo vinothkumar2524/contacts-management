@@ -1,45 +1,37 @@
 <template>
-  <div class="container mx-auto h-screen bg-green-300">
+  <div class="container bg-gray-100 mx-auto h-screen w-1/2">
       <Header/>
       <div class="grid grid-cols-3 gap-4">
-        <div class="col-span-2 bg-red-300">
-          <ContactDetailsCard
-            v-if="currentScreen == 'showContact'"/>
-            <EditContact
-            v-if="currentScreen == 'editContact'"
-            @save="onSaveContact"/>
-        </div>
-        <div class="bg-red-300">
-          <div class="">
+        <div class="bg-gray-100 border-r-2 border-gray-200">
+          <div class="flex pl-2 ">
+            <!-- <img class="w-8 h-8 mt-4" src="../assets/add_user.png"> -->
+            <div>
+              <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="svg" version="1.1" width="400" height="400" viewBox="0, 0, 400,400"><g id="svgg"><path id="path0" d="M174.609 1.194 C 8.750 22.804,-59.514 227.069,60.256 343.370 C 173.155 452.998,362.812 395.808,395.987 242.132 C 424.984 107.811,310.727 -16.541,174.609 1.194 M214.844 81.351 C 243.861 88.583,263.830 118.120,259.386 147.236 C 252.016 195.523,195.420 215.954,159.605 183.257 C 113.944 141.570,154.710 66.364,214.844 81.351 M175.391 212.810 C 192.416 218.789,207.584 218.789,224.609 212.810 C 228.906 211.301,233.000 209.879,233.707 209.651 C 235.230 209.159,250.653 222.466,259.378 231.800 L 265.071 237.891 260.270 238.123 L 255.469 238.356 255.469 253.944 L 255.469 269.531 239.844 269.531 L 224.219 269.531 224.219 288.672 L 224.219 307.813 168.359 307.813 L 112.500 307.813 112.500 301.858 C 112.500 276.503,122.798 250.891,140.707 231.700 C 149.398 222.388,164.755 209.154,166.294 209.651 C 167.000 209.879,171.094 211.301,175.391 212.810 M291.406 267.969 L 291.406 283.594 307.031 283.594 L 322.656 283.594 322.656 294.141 L 322.656 304.688 307.031 304.688 L 291.406 304.688 291.406 320.313 L 291.406 335.938 280.859 335.938 L 270.313 335.938 270.313 320.313 L 270.313 304.688 254.688 304.688 L 239.063 304.688 239.063 294.141 L 239.063 283.594 254.688 283.594 L 270.313 283.594 270.313 267.969 L 270.313 252.344 280.859 252.344 L 291.406 252.344 291.406 267.969 " stroke="none" fill="#000000" fill-rule="evenodd"/></g></svg>
+            </div>
             <button
-              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-2 mt-2"
+               @click="onNewContact"
             >
-              create contact btn
+              Create New
             </button>
           </div>
-          <div class="overflow-y-scroll" style="max-height: 64px;">
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
-            <div>contact</div>
+          <div class="p-2 bg-gray-100">
+            <div v-for="(contact, index) in rows" :key="index" @click="onShowContact(contact)" class="mt-2 rounded bg-gray-300 p-2 cursor-pointer hover:bg-gray-400">{{contact.name}}</div>
+            
           </div>
         </div>
+        <div class="col-span-2 bg-gray-100 pr-4" >
+          <ContactDetailsCard
+            v-if="currentScreen == 'showContact'"
+            :contact="contact"
+            @edit="onEditContact"
+            @delete="onDeleteContact"/>
+            <EditContact
+            v-if="currentScreen == 'editContact'"
+            @save="onSaveContact"
+            @cancel="onCancelEdit"/>
+        </div>
+        
       </div>
     </div>
 </template>
@@ -85,7 +77,32 @@ export default {
         async onSaveContact (contact) {
             await this.saveContact(contact)
             this.formContact = initContact
-            // this.onShowContact(contact)
+            this.onShowContact(contact)
+        },
+        setScreen(screen) {
+          this.currentScreen = screen
+        },
+        onShowContact(contact) {
+          this.setScreen('showContact')
+          this.selectContact(contact)
+        },
+        onEditContact(contact) {
+          this.setScreen('editContact')
+          this.formContact = contact
+        },
+
+        onDeleteContact(contact) {
+          this.deleteContact(contact)
+          this.formContact = initContact
+        },
+
+        onNewContact() {
+          this.setScreen('editContact')
+          this.formContact = initContact
+        },
+        onCancelEdit() {
+          this.setScreen('showContact')
+          this.formContact = initContact
         },
     }
 }

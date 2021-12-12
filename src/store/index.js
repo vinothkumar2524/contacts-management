@@ -1,5 +1,6 @@
 import { createStore } from 'vuex'
 import contacts from './contacts';
+import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
   state: {
@@ -10,5 +11,6 @@ export default createStore({
   },
   modules: {
     contacts
-  }
+  },
+  plugins: [createPersistedState()],
 })
