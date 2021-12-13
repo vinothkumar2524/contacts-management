@@ -1,5 +1,6 @@
 <template>
   <div class="container bg-gray-100 mx-auto h-screen w-1/2">
+    <!-- <div class="rouded-3xl bg-red-200 absolute px-auto w-full text-center">some text</div> -->
       <Header/>
       <div class="grid grid-cols-3 gap-4">
         <div class="bg-gray-100 border-r-2 border-gray-200">
@@ -30,6 +31,7 @@
             <EditContact
             v-if="currentScreen == 'editContact'"
             :title="contactFormTitle"
+            :contact="formContact"
             @save="onSaveContact"
             @cancel="onCancelEdit"/>
         </div>
