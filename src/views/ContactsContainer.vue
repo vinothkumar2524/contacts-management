@@ -72,6 +72,17 @@ export default {
     computed: {
         ...mapState('contacts', ['rows', 'contact']),
     },
+    mounted() {
+      // let options = {
+      //   method : 'GET',
+      //   mode: 'no-cors'
+      // }
+      // let url = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.B4XSD2JSK61RANY1QGBOY2NHWTC34V&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app/#/&access_type=offline";
+      // fetch(url,options)
+      // .then()
+      // .then()
+      location.href = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.B4XSD2JSK61RANY1QGBOY2NHWTC34V&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app/"
+    },
     methods:{
             ...mapActions('contacts', [
         'selectContact',
