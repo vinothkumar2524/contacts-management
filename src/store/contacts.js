@@ -1,7 +1,8 @@
 import uuidv1 from 'uuid/v1';
+import services from "../services/contacts";
 
 const state = {
-  rows: [],
+  allContacts: [],
   contact: null
 }
 
@@ -11,19 +12,24 @@ const mutations = {
   },
 
   create (state, payload) {
-    state.rows.push(payload)
+    state.allContacts.push(payload)
   },
 
   update (state, payload) {
-    state.rows.map((row, index) => {
-      if (state.id === row.id) {
-        state.rows[index] = payload
+    state.allContacts.map((row, index) => {
+      console.log("id s ", state.con)
+      if (payload.contact_id === row.contact_id) {
+        state.allContacts[index] = payload
       }
     })
   },
 
   deleteContact (state, payload) {
-    state.rows = state.rows.filter(row => row.id !== payload.id)
+    state.allContacts = state.allContacts.filter(row => row.contact_id !== payload.contact_id)
+  },
+
+  getAllContacts (state, payload) {
+    state.allContacts = payload;
   }
 }
 
@@ -31,24 +37,60 @@ const actions = {
   selectContact ({ commit }, payload) {
     commit('selectContact', payload)
   },
-
-  saveContact({ commit, dispatch }, payload) {
+  async saveContact({ commit, dispatch }, payload) {
+    let responseMsg = '';
       console.log("payeload ", payload)
-    if (payload.id != null) {
-        console.log("update ", payload)
-      commit('update', payload)
+    if (payload.contact_id != null) {
+      try {
+         const response = await services.updateContact(payload);
+         console.log("update response ", response)
+         responseMsg = await response.message;
+         console.log("response message ", responseMsg)
+         if(response.code === 0) {
+          commit('update', payload)
+          dispatch('selectContact', payload)
+         } 
+      }
+      catch (error) {
+        console.log(error);
+      }
     } else {
-      payload = {...payload, id: uuidv1()}
-      console.log("updated payload ", payload);
-      commit('create', payload)
+      payload = {...payload, contact_id: uuidv1()}
+      console.log("create payload ", payload);
+      try {
+        const response = await services.addContact(payload);
+        responseMsg = response.message;
+        if(response.code === 0) {
+          console.log("adding")
+          commit('create', payload)
+          dispatch('selectContact', payload)
+        }
+        
+      }
+      catch (error) {
+        console.log(error);
+      }
+      
     }
 
-    dispatch('selectContact', payload)
+    return responseMsg;
   },
 
   deleteContact ({ commit }, payload) {
+    console.log("delete contact ", payload)
     commit('deleteContact', payload)
     commit('selectContact', null)
+  },
+
+  async getAllContacts ({commit}) {
+    try {
+      const contacts = await services.getAllContacts();
+      console.log("all contacts ", contacts);
+      commit('getAllContacts', contacts);
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
 }
 

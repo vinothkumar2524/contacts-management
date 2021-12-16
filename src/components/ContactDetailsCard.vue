@@ -1,9 +1,9 @@
 <template>
     <div class="container bg-blue-100 rounded-3xl p-2 mt-14 shadow-md border border-gray-300 border-t-0" v-if="contact">
-            <div class="absolute bg-gray-700 rounded-full text-3xl -mt-12 mx-40 w-24 h-24 pt-8 pl-10 shadow-md text-white">{{initial}}</div>
-            <div class="pt-14">
-                <p class="text-3xl text-center" v-if="contact.name">{{contact.name}}</p>
-                <p class="text-base text-center" v-if="contact.workPlace">{{contact.workPlace}} | {{contact.role}}</p>
+            <div class="bg-gray-700 rounded-full text-3xl -mt-12 mx-auto w-24 h-24 pt-8 pl-10 shadow-md text-white">{{initial}}</div>
+            <div class="">
+                <p class="text-3xl text-center" v-if="contact.contact_name">{{contact.contact_name}}</p>
+                <p class="text-base text-center" v-if="contact.company_name">{{contact.company_name}} | {{contact.designation}}</p>
                 <div v-if="contact.phone" class="flex">
                   <!-- <img class="h-6 w-6" src="../assets/phone.png"> -->
                   <div>
@@ -41,10 +41,12 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
     name : "ContactDetailsCard",
     props: ['contact'],
     methods: {
+      ...mapActions('toasts',['showToast']),
       onEdit (contact) {
         this.$emit('edit', contact)
       },
@@ -53,12 +55,18 @@ export default {
       },
       copyToClipBoard (text) {
         navigator.clipboard.writeText(text);
+        let toastOptions = {
+          show : true,
+          message : "copied !",
+          duration : 3000
+        }
+        this.showToast(toastOptions)
       }
     },
     
     computed: {
       initial () {
-        return this.contact?.name.charAt(0).toUpperCase();
+        return this.contact?.contact_name.charAt(0).toUpperCase();
       }
     }
 }

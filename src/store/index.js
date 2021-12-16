@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import contacts from './contacts';
-import createPersistedState from 'vuex-persistedstate'
+import toasts from './Toast';
+// import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
   state: {
@@ -10,7 +11,8 @@ export default createStore({
   actions: {
   },
   modules: {
-    contacts
+    contacts,
+    toasts
   },
-  plugins: [createPersistedState()],
+  // plugins: [createPersistedState()],
 })

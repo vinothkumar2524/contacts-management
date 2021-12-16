@@ -7,7 +7,7 @@
                     <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-name">
                         Name
                     </label>
-                    <input v-model="contactDetails.name" @input="onInput('name')" class="appearance-none block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-name" type="text" placeholder="Enter Name">
+                    <input v-model="contactDetails.contact_name" @input="onInput('name')" class="appearance-none block w-full text-gray-800 border border-gray-300 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-name" type="text" placeholder="Enter Name">
                     <p v-if="errors.name.isError" class="text-red-500 text-xs italic">{{errors.name.errorText}}</p>
                 </div>
             </div>
@@ -32,14 +32,14 @@
                     <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-work-place">
                         Work Place
                     </label>
-                    <input v-model="contactDetails.workPlace" class="appearance-none block w-full  text-gray-700 border border-red-500 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-work-place" type="text" placeholder="Jane">
+                    <input v-model="contactDetails.company_name" class="appearance-none block w-full  text-gray-700 border border-red-500 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-work-place" type="text" placeholder="Jane">
 
                 </div>
                 <div class="w-full md:w-1/2 px-3">
                     <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-role">
                         Role
                     </label>
-                    <input v-model="contactDetails.role" class="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-role" type="text" placeholder="Doe">
+                    <input v-model="contactDetails.designation" class="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-role" type="text" placeholder="Doe">
 
                 </div>
             </div>
@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// let errorValues =  {isError : false, errorText : ""}
+// let errorValues =  {isError : false, errorText : ""} 
 let initErrors = {
     name : {isError : false, errorText : ""},
     phone : {isError : false, errorText : ""},
@@ -94,14 +94,14 @@ export default {
 
         },
         isValidName () {
-            if(!this.contactDetails.name) {
+            if(!this.contactDetails.contact_name) {
                 this.setError('name', 'Name cannot be empty');
                 return false
             } 
             return true
         },
         isValidEmail () {
-            if(this.contactDetails.email) {
+            if(this.contactDetails.contact_email) {
                 let pattern = /^\w+[+.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;
                 if(!pattern.test(this.contactDetails.email)) {
                     this.setError('email', 'Enter valid email')

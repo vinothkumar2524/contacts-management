@@ -1,8 +1,8 @@
 <template>
   <div class="container bg-gray-100 mx-auto h-screen w-1/2">
-    <!-- <div class="rouded-3xl bg-red-200 absolute px-auto w-full text-center">some text</div> -->
+      <Toast/>
       <Header/>
-      <div class="grid grid-cols-3 gap-4">
+      <div class="grid grid-cols-3 gap-4 bg-gray-100">
         <div class="bg-gray-100 border-r-2 border-gray-200">
           <div class="flex pl-2 pr-2">
             <!-- <img class="w-8 h-8 mt-4" src="../assets/add_user.png"> -->
@@ -18,7 +18,7 @@
             </button>
           </div>
           <div class="p-2 bg-gray-100 h-64">
-            <div v-for="(contact, index) in rows" :key="index" @click="onShowContact(contact)" class="mt-2 rounded-md bg-gray-300 p-2 cursor-pointer hover:bg-gray-400">{{contact.name}}</div>
+            <div v-for="(contact, index) in allContacts" :key="index" @click="onShowContact(contact)" class="mt-2 rounded-md bg-gray-300 p-2 cursor-pointer hover:bg-gray-400">{{contact.contact_name}}</div>
             
           </div>
         </div>
@@ -43,6 +43,7 @@
 <script>
 import { mapActions, mapState } from 'vuex'
 import Header from "../components/Header.vue"
+import Toast from "../components/Toast.vue"
 import ContactDetailsCard from "../components/ContactDetailsCard.vue"
 import EditContact from "../components/EditContact.vue"
 
@@ -61,6 +62,7 @@ export default {
         Header,
         ContactDetailsCard,
         EditContact,
+        Toast
     },
     data() {
         return {
@@ -70,7 +72,10 @@ export default {
         }
     },
     computed: {
-        ...mapState('contacts', ['rows', 'contact']),
+        ...mapState('contacts', ['allContacts', 'contact']),
+    },
+    created() {
+        this.getAllContacts();
     },
     mounted() {
       // let options = {
@@ -81,17 +86,26 @@ export default {
       // fetch(url,options)
       // .then()
       // .then()
-      location.href = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.B4XSD2JSK61RANY1QGBOY2NHWTC34V&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app/"
+      // location.href = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.WKNQ9RKDG4REXLBHMWWB4FJ82AO1TZ&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app";
+      
     },
     methods:{
             ...mapActions('contacts', [
         'selectContact',
         'saveContact',
-        'deleteContact'
+        'deleteContact',
+        'getAllContacts'
         ]),
+        ...mapActions('toasts',['showToast']),
         
         async onSaveContact (contact) {
-            await this.saveContact(contact)
+            let response = await this.saveContact(contact)
+            let toastOptions = {
+              show : true,
+              message : response,
+              duration : 3000
+            }
+            this.showToast(toastOptions)
             this.formContact = initContact
             this.onShowContact(contact)
         },
