@@ -2,9 +2,11 @@
 import getAllContactsResponse from "../response/GetAllContacts";
 import updateContactResponse from "../response/UpdateContact";
 import addContactResponse from "../response/AddContact";
+import deleteContactResponse from "../response/DeleteContact";
 
 export default {
-    async getAllContacts () {
+    getAllContacts () {
+        //below code will be used to communicate with APIs
         // let url = ""
         // const response = await fetch(url);
         // const contacts = await response.json();
@@ -13,11 +15,16 @@ export default {
     },
 
     // payload : contact
-    async updateContact () {
+    updateContact () {
         return updateContactResponse;
     },
 
-    async addContact () {
+    //payload : contact
+    addContact () {
         return addContactResponse;
+    },
+
+    deleteContact () {
+        return deleteContactResponse;
     }
 }

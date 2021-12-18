@@ -5,10 +5,10 @@ const state = {
 }
 
 const mutations = {
-    showToast (state, {show, message, duration}) {
-      state.show = show;
+    showToast (state, { message, duration}) {
+      state.show = true;
       state.message = message;
-      state.duration = duration;
+      state.duration = duration ? duration : 3000;
     },
     reset (state) {
         state.show = false,

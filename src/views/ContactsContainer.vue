@@ -17,23 +17,34 @@
               <span class="pl-2">Create New</span>
             </button>
           </div>
-          <div class="p-2 bg-gray-100 h-64">
-            <div v-for="(contact, index) in allContacts" :key="index" @click="onShowContact(contact)" class="mt-2 rounded-md bg-gray-300 p-2 cursor-pointer hover:bg-gray-400">{{contact.contact_name}}</div>
+          <div class="p-2 bg-gray-100" style="{max-height: 600px;overflow-y: auto;}">
+            <div v-for="(contact, index) in allContacts" 
+            :key="index" 
+            @click="onShowContact(contact)" 
+            @keyup="onEnterKeyPressContact($event, contact)" 
+            tabindex="0" 
+            class="mt-2 rounded-md p-2 cursor-pointer " :class="getSelectedclass(contact)" :data-id="contact">
+
+            {{contact.contact_name}}</div>
             
           </div>
         </div>
         <div class="col-span-2 bg-gray-100 pr-4" >
+          <div class="container p-2 mt-14" v-if="fallBackMessage">
+              <p class="text-3xl text-center text-gray-400">Select a contact or create a new record.</p>
+          </div>
           <ContactDetailsCard
-            v-if="currentScreen == 'showContact'"
+            v-else-if="currentScreen == 'showContact'"
             :contact="contact"
             @edit="onEditContact"
             @delete="onDeleteContact"/>
             <EditContact
-            v-if="currentScreen == 'editContact'"
+            v-else-if="currentScreen == 'editContact'"
             :title="contactFormTitle"
             :contact="formContact"
             @save="onSaveContact"
             @cancel="onCancelEdit"/>
+            
         </div>
         
       </div>
@@ -48,12 +59,12 @@ import ContactDetailsCard from "../components/ContactDetailsCard.vue"
 import EditContact from "../components/EditContact.vue"
 
 const initContact = {
-  id: null,
+  id: 0,
   name: '',
-  email: '',
+  contact_name: '',
   phone: '',
-  workPlace: '',
-  role: ''
+  company_name: '',
+  designation: ''
 }
 
 export default {
@@ -73,22 +84,14 @@ export default {
     },
     computed: {
         ...mapState('contacts', ['allContacts', 'contact']),
+        fallBackMessage () {
+          return this.currentScreen === 'showContact' && !this.contact
+        },
     },
     created() {
         this.getAllContacts();
     },
-    mounted() {
-      // let options = {
-      //   method : 'GET',
-      //   mode: 'no-cors'
-      // }
-      // let url = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.B4XSD2JSK61RANY1QGBOY2NHWTC34V&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app/#/&access_type=offline";
-      // fetch(url,options)
-      // .then()
-      // .then()
-      // location.href = "https://accounts.zoho.in/oauth/v2/auth?scope=ZohoInvoice.contacts.CREATE%2CZohoInvoice.contacts.READ%2CZohoInvoice.contacts.UPDATE%2CZohoInvoice.contacts.DELETE&client_id=1000.WKNQ9RKDG4REXLBHMWWB4FJ82AO1TZ&state=testing&response_type=code&redirect_uri=https://laughing-sinoussi-829a91.netlify.app";
-      
-    },
+    
     methods:{
             ...mapActions('contacts', [
         'selectContact',
@@ -99,42 +102,55 @@ export default {
         ...mapActions('toasts',['showToast']),
         
         async onSaveContact (contact) {
-            let response = await this.saveContact(contact)
-            let toastOptions = {
-              show : true,
-              message : response,
-              duration : 3000
-            }
-            this.showToast(toastOptions)
-            this.formContact = initContact
-            this.onShowContact(contact)
+          let response = await this.saveContact(contact);
+          if(response) {
+            this.showToast({message : response});
+            this.formContact = initContact;
+            this.onShowContact(contact);
+          }
         },
         setScreen(screen) {
-          this.currentScreen = screen
+          this.currentScreen = screen;
         },
         onShowContact(contact) {
-          this.setScreen('showContact')
-          this.selectContact(contact)
+          this.setScreen('showContact');
+          this.selectContact(contact);
         },
         onEditContact(contact) {
-          this.setScreen('editContact')
-          this.formContact = contact
-          this.contactFormTitle = 'Edit Contact'
+          this.setScreen('editContact');
+          this.formContact = contact;
+          this.contactFormTitle = 'Edit Contact';
         },
 
-        onDeleteContact(contact) {
-          this.deleteContact(contact)
-          this.formContact = initContact
+        async onDeleteContact(contact) {
+          let response = await this.deleteContact(contact);
+          if(response) {
+            this.showToast({message : response});
+            this.formContact = initContact;
+          }
+          
         },
 
         onNewContact() {
-          this.setScreen('editContact')
-          this.formContact = initContact
-          this.contactFormTitle = 'Create Contact'
+          this.setScreen('editContact');
+          this.formContact = initContact;
+          this.contactFormTitle = 'Create Contact';
         },
         onCancelEdit() {
-          this.setScreen('showContact')
-          this.formContact = initContact
+          this.setScreen('showContact');
+          this.formContact = initContact;
+        },
+        onEnterKeyPressContact(event,contact) {
+          if (event.keyCode === 13) {
+            event.preventDefault();
+            this.onShowContact(contact);
+          }
+        },
+        getSelectedclass (contact) {
+          if(this.contact && this.contact.contact_id == contact.contact_id) {
+            return 'bg-gray-800 text-white hover:bg-gray-800'
+          }
+          return 'bg-gray-300 hover:bg-gray-400'
         },
     }
 }

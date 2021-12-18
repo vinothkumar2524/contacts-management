@@ -59,7 +59,7 @@
 </template>
 
 <script>
-// let errorValues =  {isError : false, errorText : ""} 
+import {mapState, mapActions} from "vuex";
 let initErrors = {
     name : {isError : false, errorText : ""},
     phone : {isError : false, errorText : ""},
@@ -74,6 +74,7 @@ export default {
         }
     },
     methods: {
+        ...mapActions('toasts',['showToast']),
         onSave () {
             if(this.isValidForm()) {
                 this.$emit('save',this.contactDetails);
@@ -96,7 +97,7 @@ export default {
         isValidName () {
             if(!this.contactDetails.contact_name) {
                 this.setError('name', 'Name cannot be empty');
-                return false
+                return false;
             } 
             return true
         },
@@ -104,24 +105,36 @@ export default {
             if(this.contactDetails.contact_email) {
                 let pattern = /^\w+[+.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;
                 if(!pattern.test(this.contactDetails.email)) {
-                    this.setError('email', 'Enter valid email')
-                    return false
+                    this.setError('email', 'Enter valid email');
+                    return false;
                 }
-
             }
-            return true
+            return true;
         },
         isValidPhoneNo () {
             if (!this.contactDetails.phone) {
-                this.setError('phone', 'Enter phone number')
-                return false
+                this.setError('phone', 'Enter phone number');
+                return false;
             }
             if (this.contactDetails.phone.toString().length != 10) {
-                console.log("phone length ", this.contactDetails.phone.toString().length)
-                 this.setError('phone', 'Enter valid phone number')
-                return false
+                this.setError('phone', 'Enter valid phone number');
+                return false;
             }
-            return true
+            if (this.isDuplicatePhoneNo()) {
+                this.showToast({message : "A contact with this number already exist !"})
+                console.log("duplicate phone number");
+                return false;
+            }
+                
+            return true;
+        },
+        isDuplicatePhoneNo() {
+            let isDuplicate = false;
+            this.allContacts.forEach(contact => {
+                if(contact.phone == this.contactDetails.phone) 
+                    isDuplicate = true;
+            }) 
+            return isDuplicate;
         },
         onInput (input) {
             this.errors[input].isError = false;
@@ -129,8 +142,9 @@ export default {
         }
     },
     computed: {
+        ...mapState('contacts',['allContacts']),
         contactDetails () {
-            return {...this.contact}
+            return {...this.contact};
         }
     }
 }
