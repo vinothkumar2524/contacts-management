@@ -12,19 +12,19 @@
                 </div>
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                    <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-email">
-                        E-mail
-                    </label>
-                    <input v-model="contactDetails.email" @input="onInput('email')" class="appearance-none block w-full text-gray-700 border border-red-500 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-email" type="text" placeholder="Jane">
-                    <p v-if="errors.email.isError" class="text-red-500 text-xs italic">{{errors.email.errorText}}</p>
-                </div>
                 <div class="w-full md:w-1/2 px-3">
                     <label class="block tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-phone">
                         Phone
                     </label>
-                    <input v-model="contactDetails.phone" @input="onInput('phone')" class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-phone" type="number" placeholder="Doe">
+                    <input v-model="contactDetails.phone" @input="onInput('phone')" class="appearance-none block w-full text-gray-700 border border-gray-200 bg-gray-100rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-phone" type="number" placeholder="Enter phone number">
                     <p v-if="errors.phone.isError" class="text-red-500 text-xs italic">{{errors.phone.errorText}}</p>
+                </div>
+                <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                    <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-email">
+                        E-mail
+                    </label>
+                    <input v-model="contactDetails.email" @input="onInput('email')" class="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-email" type="text" placeholder="Enter E-mail">
+                    <p v-if="errors.email.isError" class="text-red-500 text-xs italic">{{errors.email.errorText}}</p>
                 </div>
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
@@ -32,14 +32,14 @@
                     <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-work-place">
                         Work Place
                     </label>
-                    <input v-model="contactDetails.company_name" class="appearance-none block w-full  text-gray-700 border border-red-500 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-work-place" type="text" placeholder="Jane">
+                    <input v-model="contactDetails.company_name" class="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white" id="grid-work-place" type="text" placeholder="Enter company name">
 
                 </div>
                 <div class="w-full md:w-1/2 px-3">
                     <label class="block  tracking-wide text-gray-700 text-s font-bold mb-2" for="grid-role">
                         Role
                     </label>
-                    <input v-model="contactDetails.designation" class="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-role" type="text" placeholder="Doe">
+                    <input v-model="contactDetails.designation" class="appearance-none block w-full  text-gray-700 border border-gray-200 rounded py-2 px-4 mb-2 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-role" type="text" placeholder="Enter your role">
 
                 </div>
             </div>
@@ -120,7 +120,7 @@ export default {
                 this.setError('phone', 'Enter valid phone number');
                 return false;
             }
-            if (this.isDuplicatePhoneNo()) {
+            if (!this.contactDetails.contact_id && this.isDuplicatePhoneNo()) {
                 this.showToast({message : "A contact with this number already exist !"})
                 console.log("duplicate phone number");
                 return false;
