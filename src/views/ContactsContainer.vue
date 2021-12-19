@@ -30,7 +30,7 @@
         </div>
         <div class="col-span-2 bg-gray-100 pr-4" >
           <div class="container p-2 mt-14" v-if="fallBackMessage">
-              <p class="text-3xl text-center text-gray-400">Select a contact or create a new record.</p>
+              <p class="text-3xl text-center text-gray-400">Select a contact or <span class="cursor-pointer" @click="onEditContact">create a new record.</span></p>
           </div>
           <ContactDetailsCard
             v-else-if="currentScreen == 'showContact'"
