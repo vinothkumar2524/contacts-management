@@ -22,7 +22,7 @@
             @click="onShowContact(contact)" 
             @keyup="onEnterKeyPressContact($event, contact)" 
             tabindex="0" 
-            class="mt-2 rounded-md p-2 cursor-pointer " :class="getSelectedclass(contact)" :data-id="contact">
+            class="mt-2 rounded-md p-2 cursor-pointer " :class="getSelectedclass(contact)">
 
             {{contact.contact_name}}</div>
             
@@ -30,7 +30,7 @@
         </div>
         <div class="col-span-2 bg-gray-100 pr-4" >
           <div class="container p-2 mt-14" v-if="fallBackMessage">
-              <p class="text-3xl text-center text-gray-400">Select a contact or <span class="cursor-pointer" @click="onEditContact">create a new record.</span></p>
+              <p class="text-3xl text-center text-gray-400">Select a contact or <span class="cursor-pointer text-gray-500" @click="onEditContact">create a new record.</span></p>
           </div>
           <ContactDetailsCard
             v-else-if="currentScreen == 'showContact'"
@@ -104,8 +104,7 @@ export default {
           let response = await this.saveContact(contact);
           if(response) {
             this.showToast({message : response});
-            this.formContact = initContact;
-            this.onShowContact(contact);
+            this.setScreen('showContact');
           }
         },
         setScreen(screen) {

@@ -48,8 +48,7 @@ const actions = {
         response = services.addContact(payload);
         commit('create', payload);
       }
-      console.log("contact id ",payload.contact_id);
-      dispatch('selectContact', payload);
+       dispatch('selectContact', payload);
     }
     catch (e) {
       store.dispatch('toasts/showToast',{message : e} );
@@ -69,7 +68,7 @@ const actions = {
     }
     
   },
-
+ 
   async getAllContacts ({commit}) {
     try {
       const contacts = services.getAllContacts();

@@ -1,6 +1,6 @@
 import { createStore } from 'vuex'
 import contacts from './contacts';
-import toasts from './Toast';
+import toasts from './toast';
 // import createPersistedState from 'vuex-persistedstate'
 
 export default createStore({
