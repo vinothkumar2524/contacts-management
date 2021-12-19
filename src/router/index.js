@@ -1,18 +1,18 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
-import ContactsContainer from '../views/ContactsContainer.vue'
+import { createRouter, createWebHashHistory } from "vue-router";
+import ContactsContainer from "../views/ContactsContainer.vue";
 
 const routes = [
   {
-    path: '/',
-    name: 'Home',
-    component: ContactsContainer
+    path: "/",
+    name: "Home",
+    component: ContactsContainer,
   },
-]
+];
 
 const router = createRouter({
-  mode: 'history',
+  mode: "history",
   history: createWebHashHistory(),
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
