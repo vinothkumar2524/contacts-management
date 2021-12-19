@@ -102,7 +102,7 @@ export default {
             return true
         },
         isValidEmail () {
-            if(this.contactDetails.contact_email) {
+            if(this.contactDetails.email) {
                 let pattern = /^\w+[+.\w-]*@([\w-]+\.)*\w+[\w-]*\.([a-z]{2,4}|\d+)$/i;
                 if(!pattern.test(this.contactDetails.email)) {
                     this.setError('email', 'Enter valid email');
