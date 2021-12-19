@@ -24,6 +24,7 @@ export default {
         return addContactResponse;
     },
 
+    //payload : contact
     deleteContact () {
         return deleteContactResponse;
     }

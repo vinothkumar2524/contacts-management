@@ -21,7 +21,6 @@ export default {
         showToast: function () {
             this.timerId = setTimeout(() => {
                 this.reset();
-                
             }, this.duration)
         }
     },

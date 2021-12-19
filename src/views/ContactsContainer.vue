@@ -5,8 +5,7 @@
       <div class="grid grid-cols-3 gap-4 bg-gray-100">
         <div class="bg-gray-100 border-r-2 border-gray-200">
           <div class="flex pl-2 pr-2">
-            <!-- <img class="w-8 h-8 mt-4" src="../assets/add_user.png"> -->
-            
+           
             <button
               class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-2 rounded-3xl w-full mt-2 inline-flex flex-grow"
                @click="onNewContact"
@@ -17,7 +16,7 @@
               <span class="pl-2">Create New</span>
             </button>
           </div>
-          <div class="p-2 bg-gray-100" style="{max-height: 600px;overflow-y: auto;}">
+          <div class="p-2 bg-gray-100" style="max-height: 400px;overflow-y: auto;">
             <div v-for="(contact, index) in allContacts" 
             :key="index" 
             @click="onShowContact(contact)" 
@@ -128,7 +127,6 @@ export default {
             this.showToast({message : response});
             this.formContact = initContact;
           }
-          
         },
 
         onNewContact() {
